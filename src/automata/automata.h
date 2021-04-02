@@ -7,6 +7,8 @@ class Automata {
     Car* cars;
     int maxSpeed;
 
+    // == CONSTRUTORES == //
+
     Automata(Configuration _config) {
         roadLength = _config.roadLength;
         road = new bool[roadLength];
@@ -14,9 +16,13 @@ class Automata {
         cars = Car::createArrayOfCars(carCount, _config);
     }
 
+    // == MÉTODOS PÚBLICOS == //
+
     bool checkPosition(int _x, int _y) {
         return road[_x];
     }
+
+    // == MÉTODOS AUXILIARES == //
 
     std::string toString() {
         std::string result;

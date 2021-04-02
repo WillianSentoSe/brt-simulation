@@ -1,4 +1,5 @@
 class Configuration {
+    
     public: 
     int initialCarSpeed = 4;
     int defaultCarSize = 2;

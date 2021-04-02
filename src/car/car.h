@@ -1,10 +1,13 @@
 class Car {
+    
     public:
     int id;
     int speed;
     int size;
     int x;
     int y;
+
+    /* == CONSTRUTORES == */
 
     Car() {}
 
@@ -16,6 +19,8 @@ class Car {
         y = UNDEFINED;
     }
 
+    /* == MÉTODOS ESTÁTICOS == */
+
     static Car* createArrayOfCars(int _size, Configuration _config) {
         Car* array = (Car*) malloc(sizeof(Car) * _size);
 
@@ -25,6 +30,8 @@ class Car {
 
         return array;
     }
+
+    /* == MÉTODOS AUXILIARES == */
 
     std::string toString() {
         std::string result;
