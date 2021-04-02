@@ -15,7 +15,7 @@ Após compilado, o programa pode ser executado através do comando
 
 > ``./main [numero-interacoes] [tamanho-rodovia] [numero-carros]``
 
-Na ausência dos parâmetros opcional (entre "[]"), serão considerados os seguintes valores:
+Na ausência dos parâmetros opcionais (entre "[]"), serão considerados os seguintes valores:
 
 | num-interacoes | tamanho-rodovia | numero-carros |
 | -------------- | --------------- | ------------- |
