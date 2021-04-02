@@ -4,8 +4,9 @@
 #include "./car/car.h"
 #include "./automata/automata.h"
 
-int main() {
-    Configuration initialConfig;
+int main(int argc, char **argv) {
+
+    Configuration initialConfig(argc, argv);
     Automata automata(initialConfig);
 
     std::cout << automata.toString() << std::endl;
