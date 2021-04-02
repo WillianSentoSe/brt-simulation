@@ -9,8 +9,7 @@ int main(int argc, char **argv) {
     Configuration initialConfig(argc, argv);
     Automata automata(initialConfig);
 
-    std::cout << automata.toString() << std::endl;
-    std::cout << automata.carCount << std::endl;
+    automata.startSimulation();
     
     return 0;
 }

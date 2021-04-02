@@ -31,7 +31,7 @@ class Car {
         return array;
     }
 
-    /* == MÉTODOS AUXILIARES == */
+    /* == MÉTODOS PUBLICOS == */
 
     std::string toString() {
         std::string result;
@@ -47,5 +47,5 @@ class Car {
         result.append(") }");
 
         return result;
-    }
+    } 
 };
