@@ -2,16 +2,16 @@
 Projeto desenvolvido por estudantes de Ciência da Computação da Universidade Federal Rural do Rio de Janeiro.
 
 ## 1. INSTALAÇÃO
-Clone este repositório utilizando o comando de terminal
+Clone este repositório utilizando o comando de terminal:
 
 > ``git clone https://github.com/WillianSentoSe/brt-simulation``
 
-Então, use o comando a seguir para compilar a aplicação.
+Então, use o comando a seguir para compilar a aplicação:
 
 > ``g++ -o main src/main.cpp``
 
 ## 2. EXECUÇÃO
-Após compilado, o programa pode ser executado através do comando 
+Após compilado, o programa pode ser executado através do comando:
 
 > ``./main [numero-interacoes] [tamanho-rodovia] [numero-carros]``
 
