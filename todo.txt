@@ -1,0 +1,11 @@
+1. Limitar velocidade 😛😛 do carro na Car.UpdateSpeed() baseado na velocida maxima 🐆 do automato
+2. Variar aleatoriamente velocidade
+3. Instanciar carros 🤬 no inicio da rodovia 🙈
+4. Adicionar faixa 😍
+5. Adicionar estações(vetor(ah é!🤣) ordenado de int, cada posição é uma estação)
+6. Fazer carro parar nas estações (mudança de faixa)
+
+
+(☞ﾟヮﾟ)☞ Reflexão do dia ☜(ﾟヮﾟ☜) 
+
+    02/04/2020 - Vossês si lembram de quando nossa pherramenta de verçionamento era o dontpad? rs😂😂😂👩🏼‍🦰༼ つ ◕_◕ ༽つ🤢

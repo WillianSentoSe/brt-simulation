@@ -9,9 +9,7 @@ class Car {
 
     /* == CONSTRUTORES == */
 
-    Car() {}
-
-    Car(Configuration _config){
+    Car(int id, Configuration _config){
         speed = _config.initialCarSpeed;
         size = _config.defaultCarSize;
         id = 0; // TODO: gerar novo ID 
@@ -19,17 +17,36 @@ class Car {
         y = UNDEFINED;
     }
 
-    /* == MÉTODOS ESTÁTICOS == */
+    /***
+     * MÉTODOS ESTÁTICOS
+     ***/
 
     static Car* createArrayOfCars(int _size, Configuration _config) {
         Car* array = (Car*) malloc(sizeof(Car) * _size);
 
         for(int i = 0; i < _size; i++) {
-            array[i] = Car(_config);
+            array[i] = Car(i, _config);
         }
 
         return array;
     }
+
+    int getNewSpeed(Automata _automata) {
+        for (int i = x; i < x + speed; i++) {
+            if (!(_automata.checkPosition(x, y))) {
+                return speed = i - 1;
+            }
+        }
+
+        return speed + 1;
+    }
+
+    void move(Automata _automata) {
+        speed = getNewSpeed();
+        x += speed;
+    }
+
+    // 0 0 0 0 0 0 0 4 0 1 0 0 0 0 
 
     /* == MÉTODOS PUBLICOS == */
 

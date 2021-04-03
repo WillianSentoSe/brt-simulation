@@ -1,1 +1,0 @@
-#define UNDEFINED -1

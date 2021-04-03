@@ -1,8 +1,8 @@
 #include <iostream>
-#include "header.h"
-#include "./configuration/configuration.h"
-#include "./car/car.h"
-#include "./automata/automata.h"
+#include "header.hpp"
+#include "./configuration/configuration.cpp"
+#include "./automata/automata.cpp"
+#include "./car/car.cpp"
 
 int main(int argc, char **argv) {
 
