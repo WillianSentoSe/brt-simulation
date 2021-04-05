@@ -67,7 +67,7 @@ class Automata {
     void iterationStep() {
         // //PARALELIZA AQ PO
         for (int i = 0; i < carCount; i++) {
-            cars[i].move(road);
+             cars[i].move(*this);
             //cars[i].updatePosition();
         }
 

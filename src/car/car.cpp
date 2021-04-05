@@ -38,11 +38,20 @@ class Car {
             }
         }
 
-        return speed + 1;
+        if(randomSlowDown()){
+            return speed -= 1;
+        }
+        
+        return speed < _automata.maxSpeed ? speed + 1 : speed;
+    }
+
+    // Gera números entre 0 e 1, caso maior que 0.25, desacelera
+    bool randomSlowDown(){
+        return (double)rand() / ((double)RAND_MAX + 1) <= 0.25;
     }
 
     void move(Automata _automata) {
-        speed = getNewSpeed();
+        speed = getNewSpeed(_automata);
         x += speed;
     }
 
