@@ -1,15 +1,13 @@
 #ifndef AUTOMATA_HPP
 #define AUTOMATA_HPP
 
-#include "./car.hpp"
-
 class Automata {
 
 public:
     /* Public Variables */
     int carCount, maxSpeed, roadLength, totalIterations;
     bool* road;
-    Car* cars;
+    std::list<Car> cars;
 
     /* Constructor */
     Automata(Configuration _config);

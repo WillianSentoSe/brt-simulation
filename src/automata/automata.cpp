@@ -1,12 +1,11 @@
 #include "../../headers/automata.hpp"
-#include "../car/car.cpp"
 
 Automata::Automata(Configuration _config) {
     carCount        = _config.carCount;
     roadLength      = _config.roadLength;
     totalIterations = _config.totalIterations;
     road            = new bool[roadLength];
-    cars            = Car::createArrayOfCars(carCount, _config);
+    cars            = Car::createListOfCars(carCount, _config);
 }
 
 // == MÉTODOS PÚBLICOS == //
@@ -55,9 +54,13 @@ std::string Automata::toString() {
 
 void Automata::iterationStep() {
     // //PARALELIZA AQ PO
-    for (int i = 0; i < carCount; i++) {
-            cars[i].move(*this);
-        //cars[i].updatePosition();
+    
+
+    for (Car car : cars) {
+        if(car.active){
+            car.move(*this);
+        }          
+        //car.updatePosition();
     }
 
     // TODO: FAZER!!!!!!!!!!!!!!!!!!!!!!!!!! (com convicção) *#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#**#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#**#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#*
@@ -80,3 +83,5 @@ void Automata::iterationStep() {
 void Automata::printRoad(int iteration) {
     std::cout << "(" << iteration << ")\t" << toString() << std::endl;
 }
+
+

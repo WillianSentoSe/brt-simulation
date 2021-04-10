@@ -1,30 +1,42 @@
 #include "../../headers/car.hpp"
 
-Car::Car(int id, Configuration _config) {
+Car::Car(int _id, Configuration _config) {
     speed = _config.initialCarSpeed;
     size = _config.defaultCarSize;
-    id = 0; // TODO: gerar novo ID 
+    id = _id;
     x = UNDEFINED;
     y = UNDEFINED;
+    active = true;
+}
+
+Car::Car() {
+    // Empty Constructor
 }
 
 /***
  * MÉTODOS ESTÁTICOS
  ***/
 
-Car* Car::createArrayOfCars(int _size, Configuration _config) {
-    Car* array = (Car*) malloc(sizeof(Car) * _size);
+std::list<Car> Car::createListOfCars(int _size, Configuration _config) {
+    std::list<Car> newList(0);
+    std::list<Car>::iterator it;
 
     for(int i = 0; i < _size; i++) {
-        array[i] = Car(i, _config);
+        Car newCar(0, _config);
+        newList.insert(it, newCar);
     }
 
-    return array;
+    return newList;
 }
 
 int Car::getNewSpeed(Automata _automata) {
     for (int i = x; i < x + speed; i++) {
-        if (!(_automata.checkPosition(x, y))) {
+
+        if(i + speed > _automata.roadLength){
+            active = false;
+            return speed;
+        }
+        if (_automata.checkPosition(i, y)) {
             return speed = i - 1;
         }
     }
@@ -65,3 +77,4 @@ std::string Car::toString() {
 
     return result;
 } 
+

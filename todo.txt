@@ -1,5 +1,6 @@
-1. Limitar velocidade 😛😛 do carro na Car.UpdateSpeed() baseado na velocida maxima 🐆 do automato
-2. Variar aleatoriamente velocidade
+1. Limitar velocidade 😛😛 do carro na Car.UpdateSpeed() baseado na velocida maxima 🐆 do automato (JEAN) (TESTANDO)
+1.1 Alterar array de carros para lista encadeada de carros
+2. Variar aleatoriamente velocidade (JEAN) (TESTANDO)
 3. Instanciar carros 🤬 no inicio da rodovia 🙈
 4. Adicionar faixa 😍
 5. Adicionar estações(vetor(ah é!🤣) ordenado de int, cada posição é uma estação)

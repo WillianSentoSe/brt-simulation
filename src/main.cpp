@@ -1,6 +1,4 @@
 #include "../headers/header.hpp"
-#include "./configuration/configuration.cpp"
-#include "./automata/automata.cpp"
 
 int main(int argc, char **argv) {
 

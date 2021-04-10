@@ -1,8 +1,6 @@
 #ifndef CONFIGURATION_HPP
 #define CONFIGURATION_HPP
 
-#include <iostream>
-
 class Configuration {
 
     public: 

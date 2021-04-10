@@ -6,7 +6,8 @@
     "configurations": [
         {
             "name": "(gdb) Iniciar",
-            "type": "cppdbg",
+            "type": 
+"cppdbg",
             "request": "launch",
             "program": "insira o nome do programa, por exemplo ${workspaceFolder}/a.exe",
             "args": [],
