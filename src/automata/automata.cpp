@@ -1,11 +1,9 @@
 #include "../../headers/automata.hpp"
 
-Automata::Automata(Configuration _config) {
-    carCount        = _config.carCount;
-    roadLength      = _config.roadLength;
-    totalIterations = _config.totalIterations;
-    road            = new bool[roadLength];
-    cars            = Car::createListOfCars(carCount, _config);
+Automata::Automata(Configuration *_config) {
+    config    = _config;
+    road      = new bool[config->roadLength];
+    cars      = Car::createListOfCars(config->carCount, _config);
 }
 
 // == MÉTODOS PÚBLICOS == //
@@ -13,7 +11,8 @@ Automata::Automata(Configuration _config) {
 void Automata::startSimulation() {
     int currentIteration = 0;
 
-    while(currentIteration++ < totalIterations) {
+    while(currentIteration++ < config->totalIterations) {
+        updateCarList();
         iterationStep();
         printRoad(currentIteration);
     }
@@ -21,7 +20,7 @@ void Automata::startSimulation() {
 
 bool Automata::checkPosition(int _x, int _y) {
     return road[_x];
-    //TODO: VERIFICAR Y
+    //TODO: Verificar Y
 }
 
 bool* Automata::createRoad(int _length) {
@@ -39,10 +38,10 @@ std::string Automata::toString() {
 
     result.append("[");
 
-    for (int i = 0; i < roadLength; i++) {
+    for (int i = 0; i < config->roadLength; i++) {
         bool occupied = checkPosition(i, 0);
-        result.append(occupied? "1" : "0");
-        result.append(i < roadLength - 1? " " : "");
+        result.append(occupied? "X" : "_");
+        result.append(i < config->roadLength - 1? " " : "");
     }
 
     result.append("]");
@@ -53,35 +52,52 @@ std::string Automata::toString() {
 // == MÉTODOS PRIVADOS == //
 
 void Automata::iterationStep() {
-    // //PARALELIZA AQ PO
-    
 
-    for (Car car : cars) {
-        if(car.active){
-            car.move(*this);
-        }          
-        //car.updatePosition();
+    bool *newRoad = new bool[config->roadLength];
+    std::list<Car>::iterator car = cars.begin();
+
+    // Verificando mudança de faixa
+    // TODO: percorrer todos os carros e efetuar mudança de faixa
+
+    // Movendo todos os carros
+    while (car != cars.end()) {
+        if(car->active) {
+            car->move(newRoad);
+            // std::cout << car->toString() << std::endl;
+        }
+        car++;
     }
 
-    // TODO: FAZER!!!!!!!!!!!!!!!!!!!!!!!!!! (com convicção) *#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#**#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#**#*#*#*#*##*#*#*##*#*#*#*#*#*#*#*#*
-    
-    // for carros (paralelizado)
-        // quer mudar de faixa.isCorreto()? faixa : faicha;
-            // pode mudar faixa?
-                // marca road[posicao] = true
-
-    // for carros (paralelizado)
-        // atualiza velocidade (roadAnt[posicao + vel])
-        // atualiza posicao
-        // marca road[posicao] = true
-    
-    // roadAnt = road
-
-    // ADO ADO ADO QUEM LER É GUEI
+    road = newRoad;
 }
 
 void Automata::printRoad(int iteration) {
     std::cout << "(" << iteration << ")\t" << toString() << std::endl;
 }
 
+void Automata::updateCarList() {
+    std::list<Car>::iterator car = cars.begin();
 
+    // Removendo carros inativos
+    while (car != cars.end()) {
+        if (car->active) {
+            ++car;
+        }
+        else {
+            car = cars.erase(car);
+        }
+    }
+
+    // Adicionando novos carros
+    if (nextCarIn <= 0) {
+        spawnCar();
+        nextCarIn = getRandomInt(config->newCarIntervalMin, config->newCarIntervalMax);
+    } else {
+        nextCarIn--;
+    }
+}
+
+void Automata::spawnCar() {
+    Car newCar(cars.size(), config);
+    cars.insert(cars.end(), newCar);
+}

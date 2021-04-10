@@ -5,12 +5,12 @@ class Automata {
 
 public:
     /* Public Variables */
-    int carCount, maxSpeed, roadLength, totalIterations;
+    Configuration *config;
     bool* road;
     std::list<Car> cars;
 
     /* Constructor */
-    Automata(Configuration _config);
+    Automata(Configuration *_config);
 
     /* Public Methods */
     void startSimulation();
@@ -21,9 +21,14 @@ public:
     std::string toString();
 
 private:
+    /* Private Variables */
+    int nextCarIn = 0;
+
     /* Private Methods */
     void iterationStep();
     void printRoad(int iteration);
+    void updateCarList();
+    void spawnCar();
 };
 
 #endif // AUTOMATA_HPP

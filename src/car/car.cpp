@@ -1,64 +1,77 @@
 #include "../../headers/car.hpp"
 
-Car::Car(int _id, Configuration _config) {
-    speed = _config.initialCarSpeed;
-    size = _config.defaultCarSize;
+Car::Car(int _id, Configuration *_config) {
+    config = _config;
     id = _id;
-    x = UNDEFINED;
-    y = UNDEFINED;
+    x = 0;
+    y = 0;
     active = true;
+    speed = _config->initialCarSpeed;
 }
 
 Car::Car() {
     // Empty Constructor
 }
 
-/***
- * MÉTODOS ESTÁTICOS
- ***/
-
-std::list<Car> Car::createListOfCars(int _size, Configuration _config) {
+std::list<Car> Car::createListOfCars(int _size, Configuration *_config) {
     std::list<Car> newList(0);
-    std::list<Car>::iterator it;
 
     for(int i = 0; i < _size; i++) {
-        Car newCar(0, _config);
-        newList.insert(it, newCar);
+        Car newCar(i, _config);
+        newList.insert(newList.end(), newCar);
     }
 
     return newList;
 }
 
-int Car::getNewSpeed(Automata _automata) {
-    for (int i = x; i < x + speed; i++) {
+int Car::getNewSpeed(bool *_road) {
+    int newSpeed = speed;
+    bool canSpeedUp = true;
 
-        if(i + speed > _automata.roadLength){
+    for (int i = x; i <= x + speed; i++) {
+
+        // Verificando se a posição passou do limite da pista
+        if(i > config->roadLength - 1){
             active = false;
-            return speed;
+            canSpeedUp = false;
+            break;
         }
-        if (_automata.checkPosition(i, y)) {
-            return speed = i - 1;
+        
+        // Verificando há carros na posição
+        else if (_road[i]) {
+            newSpeed = i - 1;
+            canSpeedUp = false;
+            break;
         }
+        
     }
 
-    if(randomSlowDown()){
-        return speed -= 1;
+    // Aumentando velocidade quando possível
+    if (canSpeedUp && newSpeed < config->maxSpeed) {
+        newSpeed++;
     }
     
-    return speed < _automata.maxSpeed ? speed + 1 : speed;
+    // Desacelerando aleatoriamente
+    if(newSpeed > 0 && randomSlowDown()){
+        newSpeed--;
+    }
+
+    return newSpeed;
 }
 
-// Gera números entre 0 e 1, caso maior que 0.25, desacelera
+// Gera números entre 0 e 1, caso maior que breakProbability, desacelera
 bool Car::randomSlowDown(){
-    return (double)rand() / ((double)RAND_MAX + 1) <= 0.25;
+    return (double)rand() / ((double)RAND_MAX + 1) <= config->breakProbability;
 }
 
-void Car::move(Automata _automata) {
-    speed = getNewSpeed(_automata);
+void Car::move(bool *_road) {
+    speed = getNewSpeed(_road);
+
     x += speed;
+    if (x < config->roadLength) {
+        _road[x] = true;
+    }
 }
-
-// 0 0 0 0 0 0 0 4 0 1 0 0 0 0 
 
 /* == MÉTODOS PUBLICOS == */
 
@@ -73,6 +86,8 @@ std::string Car::toString() {
     result.append(std::to_string(y));
     result.append(") | VEL = (");
     result.append(std::to_string(speed));
+    result.append(") | ATV = (");
+    result.append(active? "TRUE" : "FALSE");
     result.append(") }");
 
     return result;

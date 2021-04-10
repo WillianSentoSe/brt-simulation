@@ -5,18 +5,19 @@ class Car {
 public:
 
     /* Public Variables */
+    Configuration *config;
     int id, speed, size, x, y;
     bool active = false;
 
     /* Constructor */
-    Car(int id, Configuration _config);
+    Car(int id, Configuration *_config);
     Car();
 
     /* Static Methods */
-    static std::list<Car> createListOfCars(int, Configuration);
+    static std::list<Car> createListOfCars(int, Configuration*);
 
     /* Public Methods */
-    void move(Automata _automata);
+    void move(bool *road);
 
     /* Utils */
     std::string toString();
@@ -24,8 +25,8 @@ public:
 private:
     /* Private Methods */
     bool randomSlowDown();
-    int getNewSpeed(Automata _automata);
-    int updateSpeed(Automata *);
+    int getNewSpeed(bool *road);
+    int updateSpeed(bool *road);
 };
 
 #endif // CAR_HPP

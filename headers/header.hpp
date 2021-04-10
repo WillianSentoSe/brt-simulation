@@ -16,6 +16,7 @@ class Car;
 #include "./car.hpp"
 #include "./automata.hpp"
 
+#include "../src/util/util.cpp"
 #include "../src/configuration/configuration.cpp"
 #include "../src/car/car.cpp"
 #include "../src/automata/automata.cpp"
