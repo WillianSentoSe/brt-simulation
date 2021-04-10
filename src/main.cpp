@@ -1,9 +1,6 @@
-#include <iostream>
-#include "header.hpp"
+#include "../headers/header.hpp"
 #include "./configuration/configuration.cpp"
 #include "./automata/automata.cpp"
-#include "./car/car.cpp"
-#include<time.h>
 
 int main(int argc, char **argv) {
 
