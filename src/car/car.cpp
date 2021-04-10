@@ -28,17 +28,17 @@ int Car::getNewSpeed(bool *_road) {
     int newSpeed = speed;
     bool canSpeedUp = true;
 
-    for (int i = x; i <= x + speed; i++) {
+    for (int i = 0; i <= speed; i++) {
 
         // Verificando se a posição passou do limite da pista
-        if(i > config->roadLength - 1){
+        if(x + i > config->roadLength - 1){
             active = false;
             canSpeedUp = false;
             break;
         }
         
         // Verificando há carros na posição
-        else if (_road[i]) {
+        else if (_road[x + i]) {
             newSpeed = i - 1;
             canSpeedUp = false;
             break;

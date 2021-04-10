@@ -8,12 +8,12 @@ class Configuration {
     int defaultCarSize = 2;
     int roadLength = 100;
     int carCount = 25;
-    int maxSpeed = 1;
+    int maxSpeed = 3;
     int totalIterations = 1000;
     int newCarIntervalMin = 1;
-    int newCarIntervalMax = 1;
+    int newCarIntervalMax = 4;
 
-    float breakProbability = 0.25;
+    float breakProbability = 0.45;
 
     /* Constructor */
     Configuration(int argc, char **argv);

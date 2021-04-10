@@ -1,7 +1,7 @@
-1. Limitar velocidade 😛😛 do carro na Car.UpdateSpeed() baseado na velocida maxima 🐆 do automato (JEAN) (TESTANDO)
-1.1 Alterar array de carros para lista encadeada de carros
-2. Variar aleatoriamente velocidade (JEAN) (TESTANDO)
-3. Instanciar carros 🤬 no inicio da rodovia 🙈
+✅1. Limitar velocidade 😛😛 do carro na Car.UpdateSpeed() baseado na velocida maxima 🐆 do automato (JEAN) (TESTANDO)
+✅1.1 Alterar array de carros para lista encadeada de carros
+✅2. Variar aleatoriamente velocidade (JEAN) (TESTANDO)
+✅3. Instanciar carros 🤬 no inicio da rodovia 🙈
 4. Adicionar faixa 😍
 5. Adicionar estações(vetor(ah é!🤣) ordenado de int, cada posição é uma estação)
 6. Fazer carro parar nas estações (mudança de faixa)
@@ -10,3 +10,4 @@
 (☞ﾟヮﾟ)☞ Reflexão do dia ☜(ﾟヮﾟ☜) 
 
     02/04/2020 - Vossês si lembram de quando nossa pherramenta de verçionamento era o dontpad? rs😂😂😂👩🏼‍🦰༼ つ ◕_◕ ༽つ🤢
+    10/04/2020 - Tudo seria mais facil se a gente tivesse duplicado a lista 🙄😶🙄🥱
