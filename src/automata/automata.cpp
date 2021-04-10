@@ -2,7 +2,7 @@
 
 Automata::Automata(Configuration *_config) {
     config    = _config;
-    road      = new bool[config->roadLength];
+    road      = createBooleanArray(config->roadLength);
     cars      = Car::createListOfCars(config->carCount, _config);
 }
 
@@ -40,7 +40,7 @@ std::string Automata::toString() {
 
     for (int i = 0; i < config->roadLength; i++) {
         bool occupied = checkPosition(i, 0);
-        result.append(occupied? "X" : "_");
+        result.append(occupied? "O" : "_");
         result.append(i < config->roadLength - 1? " " : "");
     }
 
@@ -53,7 +53,7 @@ std::string Automata::toString() {
 
 void Automata::iterationStep() {
 
-    bool *newRoad = new bool[config->roadLength];
+    bool *newRoad = createBooleanArray(config->roadLength);
     std::list<Car>::iterator car = cars.begin();
 
     // Verificando mudança de faixa
