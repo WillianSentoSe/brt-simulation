@@ -8,6 +8,10 @@
 
 #define UNDEFINED -1
 
+#define WALL -1
+#define ROAD 0
+#define OCCUPIED 1
+
 class Station;
 class Automata;
 class Configuration;

@@ -6,7 +6,7 @@ class Automata {
 public:
     /* Public Variables */
     Configuration *config;
-    bool** road;
+    int** road;
     Station* stations;
     std::list<Car> cars;
 
@@ -15,7 +15,7 @@ public:
 
     /* Public Methods */
     void startSimulation();
-    bool** createRoad(int _length);
+    int** createRoad();
 
     /* Utils */
     std::string toString();

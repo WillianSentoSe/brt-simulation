@@ -21,14 +21,13 @@ void Automata::startSimulation() {
 
 void Automata::iterationStep() {
 
-    bool **newRoad = createRoad(config->roadLength);
+    int **newRoad = createRoad();
     std::list<Car>::iterator car = cars.begin();
 
-    // Verificando mudança de faixa
+    // Verificando mudança de faixa (PARALELIZAVEL)
     while (car != cars.end()) {
-        if(car->active) {
+        if(car->active && !car->sleeping) {
             car->switchLane(road, config->roadLength, stations);
-            // print(car->toString());
         }
         car++;
     }
@@ -38,19 +37,16 @@ void Automata::iterationStep() {
     // Movendo todos os carros
     while (car != cars.end()) {
         if(car->active) {
-            if (car->sleepingTime == 0) {
+            if (!car->sleeping) {
                 car->move(road, config->roadLength, config->maxSpeed, config->breakProbability, stations, config->stationsCount);
-                
             }
             else {
-                car->sleepingTime--;
+                car->sleeping--;
             }
-
+            
             if (car->x < config->roadLength) {
                 newRoad[car->x][car->y] = true;
             }
-
-            // print(car->toString());
         }
         car++;
     }
@@ -58,27 +54,29 @@ void Automata::iterationStep() {
     road = newRoad;
 }
 
-bool** Automata::createRoad(int _length) {
-    bool **road = createBooleanArray(config->roadLength);
+int** Automata::createRoad() {
+    int **road = createBooleanMatrix(config->roadLength);
 
-    for (int i = 0; i < _length; i++) {
-        road[i][0] = false;
-        road[i][1] = true;
+    for (int i = 0; i < config->roadLength; i++) {
+        road[i][0] = ROAD;
+        road[i][1] = WALL;
     }
 
     for (int i = 0; i < config->stationsCount; i++) {
-    Station station = stations[i];
-    
-    for (int j = 0; j < (station.size * 2) + 1; j++) {
-        int pos = (station.x - station.size + j) * 2;
+        Station station = stations[i];
+        
+        for (int j = 0; j < station.size * 2 + 1; j++) {
+            int pos = station.x - station.size + j;
 
-        if (pos >= 0 && pos < _length) {
-            road[i][1] = false;
+            if (pos >= 0 && pos < config->roadLength - 1) {
+                road[pos][1] = ROAD;
+            }
         }
     }
 
     return road;
 }
+
 
 std::string Automata::toString() {
     std::string secundaryRoad = "";
@@ -87,7 +85,7 @@ std::string Automata::toString() {
 
     // Imprimindo faixa secundária
     for (int i = 0; i < config->roadLength; i++) {
-        bool occupied = road[i][1];
+        bool occupied = road[i][1] == OCCUPIED;
         secundaryRoad.append(occupied? "O" : " ");
         secundaryRoad.append(i < config->roadLength - 1? " " : "");
     }
@@ -109,7 +107,7 @@ std::string Automata::toString() {
 
     // Imprimindo faixa principal
     for (int i = 0; i < config->roadLength; i++) {
-        bool occupied = road[i][0];
+        bool occupied = road[i][0] == OCCUPIED;
         primaryRoad.append(occupied? "O" : "_");
         primaryRoad.append(i < config->roadLength - 1? " " : "");
     }
@@ -152,7 +150,7 @@ void Automata::updateCarList() {
 }
 
 void Automata::spawnCar() {
-    if (road[0][0] == false && cars.size() < config->maxCarCount) {
+    if (road[0][0] == ROAD && cars.size() < config->maxCarCount) {
         Car newCar(cars.size(), config->initialCarSpeed, stations);
         cars.insert(cars.end(), newCar);
         nextCarIn = getRandomInt(config->newCarIntervalMin, config->newCarIntervalMax);

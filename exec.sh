@@ -1,6 +1,6 @@
 #!/bin/bash
 ittrs=100       # Quantidade de Iterações
-rd_size=100     # Tamanho da Estrada
+rd_size=50      # Tamanho da Estrada
 max_cars=1000   # Quantidade Maxima de Carros
 max_speed=2     # Velocidade Maxima dos Carros
 min_spwn=1      # Numero minima de iterações para gerar novo Carro

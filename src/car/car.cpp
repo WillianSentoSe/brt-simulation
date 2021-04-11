@@ -17,17 +17,17 @@ std::list<Car> Car::createListOfCars() {
     return newList;
 }
 
-void Car::move(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationCount) {
+void Car::move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationCount) {
     speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability, _stations);
     x += speed;
 
     if (x == _stations[nextStation].x) {
-        sleepingTime = 5;
+        sleeping = 5;
         nextStation = getNextStation(_stations, _stationCount);
     }
 }
 
-int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations) {
+int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations) {
     int newSpeed = speed;
     bool canSpeedUp = true;
 
@@ -43,7 +43,7 @@ int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakP
         }
         
         // Verificando há carros na posição
-        else if (_road[x + i][y]) {
+        else if (_road[x + i][y] != ROAD) {
             newSpeed = i - 1;
             canSpeedUp = false;
             break;
@@ -70,7 +70,7 @@ int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakP
     return newSpeed > 0? newSpeed : 0;
 }
 
-void Car::switchLane(bool **_road, int _roadLenght, Station* _stations) {
+void Car::switchLane(int **_road, int _roadLenght, Station* _stations) {
     if (nextStation == UNDEFINED) return;
 
     Station station = _stations[nextStation];
@@ -80,7 +80,7 @@ void Car::switchLane(bool **_road, int _roadLenght, Station* _stations) {
         wantChangeLane = true;
 
         // Verificando se carro pode parar na estação
-        if (!_road[x][1]) {
+        if (_road[x][1] != OCCUPIED) {
             y = 1;
             wantChangeLane = false;
         }
@@ -90,14 +90,15 @@ void Car::switchLane(bool **_road, int _roadLenght, Station* _stations) {
     else if (y == 1 && x < station.x - station.size) {
 
         // Verificando se carro pode sair da estação
-        if (!_road[x][0]) {
+        if (_road[x][0] != OCCUPIED) {
             y = 0;
         }
     }
 }
 
 int Car::getNextStation(Station* _stations, int _stationCount) {
-    return nextStation < _stationCount? nextStation++ : UNDEFINED;
+    int _nextStation = nextStation < _stationCount? nextStation + 1 : UNDEFINED;
+    return _nextStation;
 }
 
 std::string Car::toString() {
