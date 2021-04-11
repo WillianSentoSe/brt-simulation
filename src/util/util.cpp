@@ -20,3 +20,41 @@ void print(std::string str) {
 bool randomSlowDown(float _prob){
     return (double) rand() / ((double) RAND_MAX + 1) <= _prob;
 }
+
+// Calcula a distância entre duas posições
+int getDistance(int _x1, int _x2) {
+    int diff = _x2 - _x1;
+    return diff >= 0? diff : -diff;
+}
+
+std::string parseCode(int _code) {
+    switch (_code) {
+        case ROAD:
+            return "_";
+
+        case OCCUPIED:
+            return "O";
+
+        case WALL:
+            return " ";
+        
+        default:
+            return "";
+    }
+}
+
+std::string parseStatus(int _status) {
+    switch (_status) {
+        case REMOVED:
+            return "REMOVED";
+
+        case DRIVING:
+            return "DRIVING";
+
+        case STOPPED:
+            return "STOPPED";
+        
+        default:
+            return "UNDEFINED";
+    }
+}

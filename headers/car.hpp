@@ -5,10 +5,9 @@ class Car {
 public:
 
     /* Public Variables */
-    int id = UNDEFINED, speed = UNDEFINED, size = UNDEFINED, x = UNDEFINED, y = UNDEFINED;
-    int nextStation = 0, sleeping = 0;
+    int id = UNDEFINED, speed = UNDEFINED, size = UNDEFINED, x = UNDEFINED, lane = UNDEFINED, status = UNDEFINED;
+    int nextStation = 0, sleepingTime = 0;
     bool wantChangeLane = false;
-    bool active = false;
 
     /* Constructor */
     Car(int _id, int _initiaSpeed, Station* _stations);

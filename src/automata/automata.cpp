@@ -24,9 +24,9 @@ void Automata::iterationStep() {
     int **newRoad = createRoad();
     std::list<Car>::iterator car = cars.begin();
 
-    // Verificando mudança de faixa (PARALELIZAVEL)
+    // Verificando mudança de faixa (🙏🏼 PARALELIZAVEL 🙏🏼)
     while (car != cars.end()) {
-        if(car->active && !car->sleeping) {
+        if(car->status == DRIVING) {
             car->switchLane(road, config->roadLength, stations);
         }
         car++;
@@ -34,20 +34,13 @@ void Automata::iterationStep() {
 
     car = cars.begin();
 
-    // Movendo todos os carros
+    // Movendo todos os carros (🙏🏼 PARALELIZAVEL 🙏🏼)
     while (car != cars.end()) {
-        if(car->active) {
-            if (!car->sleeping) {
-                car->move(road, config->roadLength, config->maxSpeed, config->breakProbability, stations, config->stationsCount);
-            }
-            else {
-                car->sleeping--;
-            }
-            
-            if (car->x < config->roadLength) {
-                newRoad[car->x][car->y] = true;
-            }
-        }
+        car->move(road, config->roadLength, config->maxSpeed, config->breakProbability, stations, config->stationsCount);
+        
+        if (car->status != REMOVED) 
+            newRoad[car->x][car->lane] = OCCUPIED;
+        
         car++;
     }
 
@@ -83,33 +76,14 @@ std::string Automata::toString() {
     std::string primaryRoad = "";
     std::string result = "";
 
-    // Imprimindo faixa secundária
     for (int i = 0; i < config->roadLength; i++) {
-        bool occupied = road[i][1] == OCCUPIED;
-        secundaryRoad.append(occupied? "O" : " ");
-        secundaryRoad.append(i < config->roadLength - 1? " " : "");
-    }
-
-    // Imprimindo estações
-    for (int i = 0; i < config->stationsCount; i++) {
-        Station station = stations[i];
-        
-        for (int j = 0; j < (station.size * 2) + 1; j++) {
-            int pos = (station.x - station.size + j) * 2;
-
-            if (pos >= 0 && pos < secundaryRoad.length()) {
-                if (secundaryRoad.at(pos) != 'O') {
-                    secundaryRoad.replace(pos, 1, "_");
-                }
-            }
-        }
-    }
-
-    // Imprimindo faixa principal
-    for (int i = 0; i < config->roadLength; i++) {
-        bool occupied = road[i][0] == OCCUPIED;
-        primaryRoad.append(occupied? "O" : "_");
+        // Faixa primaria
+        primaryRoad.append(parseCode(road[i][0]));
         primaryRoad.append(i < config->roadLength - 1? " " : "");
+
+        // Faixa secundária
+        secundaryRoad.append(parseCode(road[i][1]));
+        secundaryRoad.append(i < config->roadLength - 1? " " : "");
     }
 
     result.append("|");
@@ -133,7 +107,7 @@ void Automata::updateCarList() {
 
     // Removendo carros inativos
     while (car != cars.end()) {
-        if (car->active) {
+        if (car->status != REMOVED) {
             ++car;
         }
         else {

@@ -8,9 +8,19 @@
 
 #define UNDEFINED -1
 
+// TIPOS DE CÉLULAS
 #define WALL -1
 #define ROAD 0
 #define OCCUPIED 1
+
+// STATUS DOS CARROS
+#define REMOVED -1
+#define STOPPED 0
+#define DRIVING 1
+
+// TIPOS DE FAIXA
+#define MAIN_LANE 0
+#define STATION_LANE 1
 
 class Station;
 class Automata;

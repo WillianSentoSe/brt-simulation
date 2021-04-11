@@ -3,10 +3,11 @@
 Car::Car(int _id, int _initiaSpeed, Station* _stations) {
     id = _id;
     x = 0;
-    y = 0;
-    active = true;
+    lane = MAIN_LANE;
     speed = _initiaSpeed;
     nextStation = 0;
+    status = DRIVING;
+    sleepingTime = 0;
     wantChangeLane = false;
 }
 
@@ -18,12 +19,32 @@ std::list<Car> Car::createListOfCars() {
 }
 
 void Car::move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationCount) {
-    speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability, _stations);
-    x += speed;
 
-    if (x == _stations[nextStation].x) {
-        sleeping = 5;
-        nextStation = getNextStation(_stations, _stationCount);
+    if (status == DRIVING) {
+
+        // Atualizando velocidade e posição do carro
+        speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability, _stations);
+        x += speed;
+
+        // Verificando se carro chegou em uma estação
+        if (nextStation != UNDEFINED && x == _stations[nextStation].x) {
+            status = STOPPED;
+            sleepingTime = 5;
+            nextStation = getNextStation(_stations, _stationCount);
+        }
+    }
+
+    else if (status == STOPPED) {
+
+        // Se ainda falta tempo parado
+        if (sleepingTime >= 0) {
+            sleepingTime--;
+        }
+
+        // Se o tempo parado terminou
+        else {
+            status = DRIVING;
+        }
     }
 }
 
@@ -37,20 +58,20 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
 
         // Verificando se a posição passou do limite da pista
         if(x + i > _roadLenght - 1){
-            active = false;
+            status = REMOVED;
             canSpeedUp = false;
             break;
         }
         
         // Verificando há carros na posição
-        else if (_road[x + i][y] != ROAD) {
+        else if (_road[x + i][lane] != ROAD) {
             newSpeed = i - 1;
             canSpeedUp = false;
             break;
         }
         
         // Verificando se a posição é a próxima parada
-        else if (x + i == _stations[nextStation].x) {
+        else if (nextStation != UNDEFINED && x + i == _stations[nextStation].x) {
             newSpeed = i;
             canSpeedUp = false;
             break;
@@ -58,7 +79,7 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
     }
 
     // Aumentando velocidade quando possível
-    if (canSpeedUp && newSpeed < _maxSpeed) {
+    if (canSpeedUp && newSpeed < _maxSpeed && _road[x + 1][lane] == ROAD) {
         newSpeed++;
     }
     
@@ -71,27 +92,31 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
 }
 
 void Car::switchLane(int **_road, int _roadLenght, Station* _stations) {
-    if (nextStation == UNDEFINED) return;
 
-    Station station = _stations[nextStation];
+    bool hasNextStation = nextStation != UNDEFINED;
+    int closeToStation = false;
+
+    if (nextStation != UNDEFINED) {
+        closeToStation = getDistance(x, _stations[nextStation].x) <= _stations[nextStation].size;
+    }
 
     // Verificando se carro quer parar na estação
-    if (y == 0 && x >= station.x - station.size){
+    if (lane == MAIN_LANE && closeToStation){
         wantChangeLane = true;
 
         // Verificando se carro pode parar na estação
-        if (_road[x][1] != OCCUPIED) {
-            y = 1;
+        if (_road[x][1] == ROAD) {
+            lane = STATION_LANE;
             wantChangeLane = false;
         }
     }
 
     // Verificando se carro quer sair da estação
-    else if (y == 1 && x < station.x - station.size) {
+    else if (lane == STATION_LANE && status == DRIVING) {
 
         // Verificando se carro pode sair da estação
-        if (_road[x][0] != OCCUPIED) {
-            y = 0;
+        if (_road[x][0] == ROAD) {
+            lane = MAIN_LANE;
         }
     }
 }
@@ -106,14 +131,14 @@ std::string Car::toString() {
 
     result.append("Car [");
     result.append(std::to_string(id));
-    result.append("] = { POS = (");
+    result.append("] = { POSITION = (");
     result.append(std::to_string(x));
     result.append(", ");
-    result.append(std::to_string(y));
-    result.append(") | VEL = (");
+    result.append(std::to_string(lane));
+    result.append(") | VELOCITY = (");
     result.append(std::to_string(speed));
-    result.append(") | ATV = (");
-    result.append(active? "TRUE" : "FALSE");
+    result.append(") | STATUS = (");
+    result.append(parseStatus(status));
     result.append(") }");
 
     return result;

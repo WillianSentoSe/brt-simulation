@@ -13,20 +13,13 @@ Station* Station::createStationsList(int _size, int _roadLenght) {
 
     for (int i = 0; i < _size; i++) {
         Station station(i, (_roadLenght / _size / 2) + (i * (_roadLenght / _size - 1)));
-        print(station.toString());
         stations[i] = station;
     }
-    // std::list<Station> newList(0);
 
-    // for(int i = 0; i < _size; i++) {
-    //     Station station(i, (_roadLenght / _size / 2) + (i * (_roadLenght / _size - 1)));
-    //     print(station.toString());
-    //     newList.insert(newList.end(), station);
-    // }
-
-    // return newList;
     return stations;
 }
+
+
 
 std::string Station::toString() {
     std::string result;
