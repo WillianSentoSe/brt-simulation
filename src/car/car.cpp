@@ -72,7 +72,7 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
         }
         
         // Verificando se a posição é a próxima parada
-        else if (nextStation != UNDEFINED && x + i == _stations[nextStation].x) {
+        else if (nextStation != UNDEFINED && getDistance(x + i, _stations[nextStation].x) <= _stations[nextStation].size) {
             newSpeed = i;
             canSpeedUp = false;
             break;
@@ -95,14 +95,14 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
 void Car::switchLane(int **_road, int _roadLenght, Station* _stations) {
 
     bool hasNextStation = nextStation != UNDEFINED;
-    int closeToStation = false;
+    int isCloseToStation = false;
 
     if (nextStation != UNDEFINED) {
-        closeToStation = getDistance(x, _stations[nextStation].x) <= _stations[nextStation].size;
+        isCloseToStation = getDistance(x, _stations[nextStation].x) <= _stations[nextStation].size;
     }
 
     // Verificando se carro quer parar na estação
-    if (lane == MAIN_LANE && closeToStation){
+    if (lane == MAIN_LANE && isCloseToStation){
         wantChangeLane = true;
 
         // Verificando se carro pode parar na estação
@@ -113,7 +113,7 @@ void Car::switchLane(int **_road, int _roadLenght, Station* _stations) {
     }
 
     // Verificando se carro quer sair da estação
-    else if (lane == STATION_LANE && !closeToStation && status == DRIVING) {
+    else if (lane == STATION_LANE && !isCloseToStation && status == DRIVING) {
 
         // Verificando se carro pode sair da estação
         if (_road[x][MAIN_LANE] == ROAD) {
