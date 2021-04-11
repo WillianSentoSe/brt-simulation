@@ -1,12 +1,11 @@
 #include "../../headers/car.hpp"
 
-Car::Car(int _id, Configuration *_config) {
-    config = _config;
+Car::Car(int _id, int _initiaSpeed) {
     id = _id;
     x = 0;
     y = 0;
     active = true;
-    speed = _config->initialCarSpeed;
+    speed = _initiaSpeed;
 }
 
 Car::Car() {}
@@ -16,14 +15,14 @@ std::list<Car> Car::createListOfCars() {
     return newList;
 }
 
-int Car::getNewSpeed(bool **_road) {
+int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability) {
     int newSpeed = speed;
     bool canSpeedUp = true;
 
-    for (int i = 0; i <= speed; i++) {
+    for (int i = 1; i <= speed; i++) {
 
         // Verificando se a posição passou do limite da pista
-        if(x + i > config->roadLength - 1){
+        if(x + i > _roadLenght - 1){
             active = false;
             canSpeedUp = false;
             break;
@@ -39,12 +38,12 @@ int Car::getNewSpeed(bool **_road) {
     }
 
     // Aumentando velocidade quando possível
-    if (canSpeedUp && newSpeed < config->maxSpeed) {
+    if (canSpeedUp && newSpeed < _maxSpeed) {
         newSpeed++;
     }
     
     // Desacelerando aleatoriamente
-    if(newSpeed > 0 && randomSlowDown()){
+    if(newSpeed > 0 && randomSlowDown(_breakProbability)){
         newSpeed--;
     }
 
@@ -52,15 +51,15 @@ int Car::getNewSpeed(bool **_road) {
 }
 
 // Gera números entre 0 e 1, caso maior que breakProbability, desacelera
-bool Car::randomSlowDown(){
-    return (double)rand() / ((double)RAND_MAX + 1) <= config->breakProbability;
+bool Car::randomSlowDown(float _breakProbability){
+    return (double)rand() / ((double)RAND_MAX + 1) <= _breakProbability;
 }
 
-void Car::move(bool **_road) {
-    speed = getNewSpeed(_road);
+void Car::move(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability) {
+    speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability);
 
     x += speed;
-    if (x < config->roadLength) {
+    if (x < _roadLenght) {
         _road[x][y] = true;
     }
 }

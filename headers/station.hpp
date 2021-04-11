@@ -5,13 +5,13 @@ class Station {
 
 public:
     /* Public Variables */
-    int id, x;
+    int id, x, size;
 
     /* Constructor */
     Station();
     Station(int id, int x);
 
-    static std::list<Station> createStationsList(int);
+    static std::list<Station> createStationsList(int, int);
 
     /* Utils */
     std::string toString();
