@@ -30,22 +30,23 @@ void Car::move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbabil
         if (nextStation != UNDEFINED && x == _stations[nextStation].x) {
             status = STOPPED;
             sleepingTime = 5;
-            nextStation = getNextStation(_stations, _stationCount);
         }
     }
 
-    else if (status == STOPPED) {
+    if (status == STOPPED) {
 
         // Se ainda falta tempo parado
-        if (sleepingTime >= 0) {
+        if (sleepingTime > 1) {
             sleepingTime--;
         }
 
         // Se o tempo parado terminou
         else {
             status = DRIVING;
+            nextStation = getNextStation(_stations, _stationCount);
         }
     }
+
 }
 
 int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations) {
@@ -105,17 +106,17 @@ void Car::switchLane(int **_road, int _roadLenght, Station* _stations) {
         wantChangeLane = true;
 
         // Verificando se carro pode parar na estação
-        if (_road[x][1] == ROAD) {
+        if (_road[x][STATION_LANE] == ROAD) {
             lane = STATION_LANE;
             wantChangeLane = false;
         }
     }
 
     // Verificando se carro quer sair da estação
-    else if (lane == STATION_LANE && status == DRIVING) {
+    else if (lane == STATION_LANE && !closeToStation && status == DRIVING) {
 
         // Verificando se carro pode sair da estação
-        if (_road[x][0] == ROAD) {
+        if (_road[x][MAIN_LANE] == ROAD) {
             lane = MAIN_LANE;
         }
     }
