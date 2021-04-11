@@ -7,16 +7,15 @@ public:
     /* Public Variables */
     Configuration *config;
     bool** road;
+    Station* stations;
     std::list<Car> cars;
-    std::list<Station> stations;
 
     /* Constructor */
     Automata(Configuration *_config);
 
     /* Public Methods */
     void startSimulation();
-    bool checkPosition(int _x, int _y);
-    bool* createRoad(int _length);
+    bool** createRoad(int _length);
 
     /* Utils */
     std::string toString();

@@ -2,7 +2,7 @@ int getRandomInt(int min, int max) {
     return rand() % (max-min + 1) + min;
 }
 
-bool* createBooleanArray(int _size) {
+bool** createBooleanArray(int _size) {
     bool *newArray = new bool[_size];
 
     for (int i = 0; i < _size; i++) {
@@ -24,4 +24,9 @@ bool** createBooleanMatrix(int _size) {
 
 void print(std::string str) {
     std::cout << str << std::endl;
+}
+
+// Gera números entre 0 e 1, caso maior que breakProbability, desacelera
+bool randomSlowDown(float _prob){
+    return (double) rand() / ((double) RAND_MAX + 1) <= _prob;
 }

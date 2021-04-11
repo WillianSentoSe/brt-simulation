@@ -11,7 +11,7 @@ public:
     Station();
     Station(int id, int x);
 
-    static std::list<Station> createStationsList(int, int);
+    static Station* createStationsList(int, int);
 
     /* Utils */
     std::string toString();

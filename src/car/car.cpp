@@ -1,11 +1,13 @@
 #include "../../headers/car.hpp"
 
-Car::Car(int _id, int _initiaSpeed) {
+Car::Car(int _id, int _initiaSpeed, Station* _stations) {
     id = _id;
     x = 0;
     y = 0;
     active = true;
     speed = _initiaSpeed;
+    nextStation = 0;
+    wantChangeLane = false;
 }
 
 Car::Car() {}
@@ -15,9 +17,21 @@ std::list<Car> Car::createListOfCars() {
     return newList;
 }
 
-int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability) {
+void Car::move(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationCount) {
+    speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability, _stations);
+    x += speed;
+
+    if (x == _stations[nextStation].x) {
+        sleepingTime = 5;
+        nextStation = getNextStation(_stations, _stationCount);
+    }
+}
+
+int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations) {
     int newSpeed = speed;
     bool canSpeedUp = true;
+
+    if (wantChangeLane) return 0;
 
     for (int i = 1; i <= speed; i++) {
 
@@ -35,6 +49,12 @@ int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakP
             break;
         }
         
+        // Verificando se a posição é a próxima parada
+        else if (x + i == _stations[nextStation].x) {
+            newSpeed = i;
+            canSpeedUp = false;
+            break;
+        }
     }
 
     // Aumentando velocidade quando possível
@@ -50,18 +70,34 @@ int Car::getNewSpeed(bool **_road, int _roadLenght, int _maxSpeed, float _breakP
     return newSpeed > 0? newSpeed : 0;
 }
 
-// Gera números entre 0 e 1, caso maior que breakProbability, desacelera
-bool Car::randomSlowDown(float _breakProbability){
-    return (double)rand() / ((double)RAND_MAX + 1) <= _breakProbability;
+void Car::switchLane(bool **_road, int _roadLenght, Station* _stations) {
+    if (nextStation == UNDEFINED) return;
+
+    Station station = _stations[nextStation];
+
+    // Verificando se carro quer parar na estação
+    if (y == 0 && x >= station.x - station.size){
+        wantChangeLane = true;
+
+        // Verificando se carro pode parar na estação
+        if (!_road[x][1]) {
+            y = 1;
+            wantChangeLane = false;
+        }
+    }
+
+    // Verificando se carro quer sair da estação
+    else if (y == 1 && x < station.x - station.size) {
+
+        // Verificando se carro pode sair da estação
+        if (!_road[x][0]) {
+            y = 0;
+        }
+    }
 }
 
-void Car::move(bool **_road, int _roadLenght, int _maxSpeed, float _breakProbability) {
-    speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability);
-
-    x += speed;
-    if (x < _roadLenght) {
-        _road[x][y] = true;
-    }
+int Car::getNextStation(Station* _stations, int _stationCount) {
+    return nextStation < _stationCount? nextStation++ : UNDEFINED;
 }
 
 std::string Car::toString() {
@@ -81,4 +117,3 @@ std::string Car::toString() {
 
     return result;
 } 
-

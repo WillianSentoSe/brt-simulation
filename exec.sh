@@ -1,5 +1,5 @@
 #!/bin/bash
-ittrs=25        # Quantidade de Iterações
+ittrs=100       # Quantidade de Iterações
 rd_size=100     # Tamanho da Estrada
 max_cars=1000   # Quantidade Maxima de Carros
 max_speed=2     # Velocidade Maxima dos Carros

@@ -12,7 +12,7 @@ class Configuration {
     int totalIterations = 1000;
     int newCarIntervalMin = 1;
     int newCarIntervalMax = 4;
-    int stationsCount = 3;
+    int stationsCount = 5;
 
     float breakProbability = 0.45;
 
