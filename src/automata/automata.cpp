@@ -2,7 +2,7 @@
 
 Automata::Automata(Configuration *_config) {
     config    = _config;
-    road      = createBooleanMatrix(config->roadLength);
+    road      = createIntegerMatrix(config->roadLength);
     cars      = Car::createListOfCars();
     stations  = Station::createStationsList(config->stationsCount, config->roadLength);
 }
@@ -48,12 +48,7 @@ void Automata::iterationStep() {
 }
 
 int** Automata::createRoad() {
-    int **road = createBooleanMatrix(config->roadLength);
-
-    for (int i = 0; i < config->roadLength; i++) {
-        road[i][0] = ROAD;
-        road[i][1] = WALL;
-    }
+    int **road = createIntegerMatrix(config->roadLength);
 
     for (int i = 0; i < config->stationsCount; i++) {
         Station station = stations[i];

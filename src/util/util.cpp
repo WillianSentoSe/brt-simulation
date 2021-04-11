@@ -2,11 +2,11 @@ int getRandomInt(int min, int max) {
     return rand() % (max-min + 1) + min;
 }
 
-int** createBooleanMatrix(int _size) {
+int** createIntegerMatrix(int _size) {
     int** newMatrix = new int*[_size];
 
     for (int i = 0; i < _size; i++) {
-        newMatrix[i] = new int[2] { OCCUPIED, WALL };
+        newMatrix[i] = new int[2] { ROAD, WALL };
     }
 
     return newMatrix;
