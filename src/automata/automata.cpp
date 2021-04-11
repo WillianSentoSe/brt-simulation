@@ -38,7 +38,7 @@ void Automata::iterationStep() {
     while (car != cars.end()) {
         car->move(road, config->roadLength, config->maxSpeed, config->breakProbability, stations, config->stationsCount);
         
-        if (car->status != REMOVED) 
+        if (car->x < config->roadLength)
             newRoad[car->x][car->lane] = OCCUPIED;
         
         car++;
