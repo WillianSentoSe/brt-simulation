@@ -2,8 +2,9 @@
 
 Automata::Automata(Configuration *_config) {
     config    = _config;
-    road      = createBooleanArray(config->roadLength);
-    cars      = Car::createListOfCars(config->carCount, _config);
+    road      = createBooleanMatrix(config->roadLength);
+    cars      = Car::createListOfCars();
+    stations  = Station::createStationsList(config->stationsCount);
 }
 
 // == MÉTODOS PÚBLICOS == //
@@ -36,15 +37,25 @@ bool* Automata::createRoad(int _length) {
 std::string Automata::toString() {
     std::string result;
 
-    result.append("[");
+    result.append("|");
 
+    // Imprimindo faixa secundária
     for (int i = 0; i < config->roadLength; i++) {
-        bool occupied = checkPosition(i, 0);
+        bool occupied = road[i][1];
+        result.append(occupied? "O" : " ");
+        result.append(i < config->roadLength - 1? " " : "");
+    }
+
+    result.append("|\n\t|");
+
+    // Imprimindo faixa principal
+    for (int i = 0; i < config->roadLength; i++) {
+        bool occupied = road[i][0];
         result.append(occupied? "O" : "_");
         result.append(i < config->roadLength - 1? " " : "");
     }
 
-    result.append("]");
+    result.append("|\n");
 
     return result;
 }
@@ -53,7 +64,7 @@ std::string Automata::toString() {
 
 void Automata::iterationStep() {
 
-    bool *newRoad = createBooleanArray(config->roadLength);
+    bool **newRoad = createBooleanMatrix(config->roadLength);
     std::list<Car>::iterator car = cars.begin();
 
     // Verificando mudança de faixa
@@ -63,7 +74,7 @@ void Automata::iterationStep() {
     while (car != cars.end()) {
         if(car->active) {
             car->move(newRoad);
-            // std::cout << car->toString() << std::endl;
+            // print(car->toString());
         }
         car++;
     }
@@ -91,13 +102,15 @@ void Automata::updateCarList() {
     // Adicionando novos carros
     if (nextCarIn <= 0) {
         spawnCar();
-        nextCarIn = getRandomInt(config->newCarIntervalMin, config->newCarIntervalMax);
     } else {
         nextCarIn--;
     }
 }
 
 void Automata::spawnCar() {
-    Car newCar(cars.size(), config);
-    cars.insert(cars.end(), newCar);
+    if (road[0][0] == false && cars.size() < config->maxCarCount) {
+        Car newCar(cars.size(), config);
+        cars.insert(cars.end(), newCar);
+        nextCarIn = getRandomInt(config->newCarIntervalMin, config->newCarIntervalMax);
+    }
 }

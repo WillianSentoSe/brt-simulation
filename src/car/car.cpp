@@ -9,22 +9,14 @@ Car::Car(int _id, Configuration *_config) {
     speed = _config->initialCarSpeed;
 }
 
-Car::Car() {
-    // Empty Constructor
-}
+Car::Car() {}
 
-std::list<Car> Car::createListOfCars(int _size, Configuration *_config) {
+std::list<Car> Car::createListOfCars() {
     std::list<Car> newList(0);
-
-    for(int i = 0; i < _size; i++) {
-        Car newCar(i, _config);
-        newList.insert(newList.end(), newCar);
-    }
-
     return newList;
 }
 
-int Car::getNewSpeed(bool *_road) {
+int Car::getNewSpeed(bool **_road) {
     int newSpeed = speed;
     bool canSpeedUp = true;
 
@@ -38,7 +30,7 @@ int Car::getNewSpeed(bool *_road) {
         }
         
         // Verificando há carros na posição
-        else if (_road[x + i]) {
+        else if (_road[x + i][y]) {
             newSpeed = i - 1;
             canSpeedUp = false;
             break;
@@ -56,7 +48,7 @@ int Car::getNewSpeed(bool *_road) {
         newSpeed--;
     }
 
-    return newSpeed;
+    return newSpeed > 0? newSpeed : 0;
 }
 
 // Gera números entre 0 e 1, caso maior que breakProbability, desacelera
@@ -64,16 +56,14 @@ bool Car::randomSlowDown(){
     return (double)rand() / ((double)RAND_MAX + 1) <= config->breakProbability;
 }
 
-void Car::move(bool *_road) {
+void Car::move(bool **_road) {
     speed = getNewSpeed(_road);
 
     x += speed;
     if (x < config->roadLength) {
-        _road[x] = true;
+        _road[x][y] = true;
     }
 }
-
-/* == MÉTODOS PUBLICOS == */
 
 std::string Car::toString() {
     std::string result;

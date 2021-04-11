@@ -8,17 +8,20 @@
 
 #define UNDEFINED -1
 
+class Station;
 class Automata;
 class Configuration;
 class Car;
 
 #include "./configuration.hpp"
 #include "./car.hpp"
+#include "./station.hpp"
 #include "./automata.hpp"
 
 #include "../src/util/util.cpp"
 #include "../src/configuration/configuration.cpp"
 #include "../src/car/car.cpp"
+#include "../src/station/station.cpp"
 #include "../src/automata/automata.cpp"
 
 #endif // MAIN_HPP

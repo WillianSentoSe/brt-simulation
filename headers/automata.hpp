@@ -6,8 +6,9 @@ class Automata {
 public:
     /* Public Variables */
     Configuration *config;
-    bool* road;
+    bool** road;
     std::list<Car> cars;
+    std::list<Station> stations;
 
     /* Constructor */
     Automata(Configuration *_config);
@@ -29,6 +30,7 @@ private:
     void printRoad(int iteration);
     void updateCarList();
     void spawnCar();
+    void createStationsList();
 };
 
 #endif // AUTOMATA_HPP

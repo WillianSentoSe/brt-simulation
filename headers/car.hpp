@@ -14,10 +14,10 @@ public:
     Car();
 
     /* Static Methods */
-    static std::list<Car> createListOfCars(int, Configuration*);
+    static std::list<Car> createListOfCars();
 
     /* Public Methods */
-    void move(bool *road);
+    void move(bool **road);
 
     /* Utils */
     std::string toString();
@@ -25,8 +25,8 @@ public:
 private:
     /* Private Methods */
     bool randomSlowDown();
-    int getNewSpeed(bool *road);
-    int updateSpeed(bool *road);
+    int getNewSpeed(bool **road);
+    int updateSpeed(bool **road);
 };
 
 #endif // CAR_HPP
