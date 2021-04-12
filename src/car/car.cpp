@@ -18,12 +18,12 @@ std::list<Car> Car::createListOfCars() {
     return newList;
 }
 
-void Car::move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationCount) {
+void Car::move(int **_road, Configuration* _conf, Station* _stations) {
 
     if (status == DRIVING) {
 
         // Atualizando velocidade e posição do carro
-        speed = getNewSpeed(_road, _roadLenght, _maxSpeed, _breakProbability, _stations);
+        speed = getNewSpeed(_road, _conf, _stations);
         x += speed;
 
         // Verificando se carro chegou em uma estação
@@ -43,13 +43,13 @@ void Car::move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbabil
         // Se o tempo parado terminou
         else {
             status = DRIVING;
-            nextStation = getNextStation(_stations, _stationCount);
+            nextStation = getNextStation(_stations, _conf->stationsCount);
         }
     }
 
 }
 
-int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations) {
+int Car::getNewSpeed(int **_road, Configuration* _conf, Station* _stations) {
     int newSpeed = speed;
     bool canSpeedUp = true;
 
@@ -58,7 +58,7 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
     for (int i = 1; i <= speed; i++) {
 
         // Verificando se a posição passou do limite da pista
-        if(x + i > _roadLenght - 1){
+        if(x + i > _conf->roadLength - 1){
             status = REMOVED;
             canSpeedUp = false;
             break;
@@ -80,12 +80,12 @@ int Car::getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakPr
     }
 
     // Aumentando velocidade quando possível
-    if (canSpeedUp && newSpeed < _maxSpeed && _road[x + 1][lane] == ROAD) {
+    if (canSpeedUp && newSpeed < _conf->maxSpeed && _road[x + 1][lane] == ROAD) {
         newSpeed++;
     }
     
     // Desacelerando aleatoriamente
-    if(newSpeed > 0 && randomSlowDown(_breakProbability)){
+    if(newSpeed > 0 && randomSlowDown(_conf->breakProbability)){
         newSpeed--;
     }
 

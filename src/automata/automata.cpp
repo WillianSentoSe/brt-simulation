@@ -36,7 +36,7 @@ void Automata::iterationStep() {
 
     // Movendo todos os carros (🙏🏼 PARALELIZAVEL 🙏🏼)
     while (car != cars.end()) {
-        car->move(road, config->roadLength, config->maxSpeed, config->breakProbability, stations, config->stationsCount);
+        car->move(road, config, stations);
         
         if (car->x < config->roadLength)
             newRoad[car->x][car->lane] = OCCUPIED;

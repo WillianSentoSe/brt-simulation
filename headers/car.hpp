@@ -17,7 +17,7 @@ public:
     static std::list<Car> createListOfCars();
 
     /* Public Methods */
-    void move(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations, int _stationsCount);
+    void move(int **_road, Configuration* conf, Station* _stations);
     void switchLane(int **_road, int _roadLenght, Station* _stations);
 
     /* Utils */
@@ -25,7 +25,7 @@ public:
 
 private:
     /* Private Methods */
-    int getNewSpeed(int **_road, int _roadLenght, int _maxSpeed, float _breakProbability, Station* _stations);
+    int getNewSpeed(int **_road, Configuration* conf, Station* _stations);
     int getNextStation(Station* _stations, int _stationCount);
 };
 

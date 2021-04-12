@@ -13,7 +13,8 @@ class Configuration {
     int newCarIntervalMin = 1;
     int newCarIntervalMax = 4;
     int stationsCount = 5;
-
+    int carStopIntervalMin = 3;
+    int carStopIntervalMax = 5;
     float breakProbability = 0.45;
 
     /* Constructor */

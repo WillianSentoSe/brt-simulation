@@ -8,6 +8,9 @@ Configuration::Configuration(int argc, char **argv) {
     if (argc >= 6) newCarIntervalMin = std::stoi(argv[5]);
     if (argc >= 7) newCarIntervalMax = std::stoi(argv[6]);
     if (argc >= 8) breakProbability = std::stof(argv[7]);
+    if (argc >= 9) carStopIntervalMin = std::stoi(argv[8]);
+    if (argc >= 10) carStopIntervalMax = std::stoi(argv[9]);     
+    
 
     print(toString());
 }
@@ -30,6 +33,10 @@ std::string Configuration::toString() {
     result.append(std::to_string(newCarIntervalMax));
     result.append(") | BREAK_PROB = (");
     result.append(std::to_string(breakProbability));
+    result.append(") | CAR_STOP_MIN = (");
+    result.append(std::to_string(carStopIntervalMin));
+    result.append(") | CAR_STOP_MAX = (");
+    result.append(std::to_string(carStopIntervalMax));
     result.append(") }");
 
     return result;
