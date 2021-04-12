@@ -29,7 +29,7 @@ void Car::move(int **_road, Configuration* _conf, Station* _stations) {
         // Verificando se carro chegou em uma estação
         if (nextStation != UNDEFINED && x == _stations[nextStation].x) {
             status = STOPPED;
-            sleepingTime = 5;
+            sleepingTime = getRandomInt(_conf->carStopIntervalMin, _conf->carStopIntervalMax);
         }
     }
 
