@@ -30,13 +30,13 @@ int getDistance(int _x1, int _x2) {
 std::string parseCode(int _code) {
     switch (_code) {
         case ROAD:
-            return "_";
+            return "__";
 
         case OCCUPIED:
-            return "O";
+            return "🚌";
 
         case WALL:
-            return " ";
+            return "🚧";
         
         default:
             return "";
