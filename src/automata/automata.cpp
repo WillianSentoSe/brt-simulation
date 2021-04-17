@@ -5,6 +5,10 @@ Automata::Automata(Configuration *_config) {
     road      = createIntegerMatrix(config->roadLength);
     cars      = Car::createListOfCars();
     stations  = Station::createStationsList(config->stationsCount, config->roadLength);
+
+    if (config->numThreads > 1) {
+        omp_set_num_threads(config->numThreads);
+    }
 }
 
 // == MÉTODOS PÚBLICOS == //
@@ -14,34 +18,39 @@ void Automata::startSimulation() {
 
     while(currentIteration++ < config->totalIterations) {
         updateCarList();
+
         iterationStep();
-        printRoad(currentIteration);
+        
+        //printRoad(currentIteration);
     }
 }
 
 void Automata::iterationStep() {
 
     int **newRoad = createRoad();
-    std::list<Car>::iterator car = cars.begin();
 
     // Verificando mudança de faixa (🙏🏼 PARALELIZAVEL 🙏🏼)
-    while (car != cars.end()) {
+    #pragma omp parallel
+    for (std::list<Car>::iterator car = cars.begin(); car != cars.end(); car++){
+
+        #pragma omp single nowait
         if(car->status == DRIVING) {
             car->switchLane(road, config->roadLength, stations);
         }
-        car++;
     }
 
-    car = cars.begin();
-
     // Movendo todos os carros (🙏🏼 PARALELIZAVEL 🙏🏼)
-    while (car != cars.end()) {
-        car->move(road, config, stations);
+    #pragma omp parallel
+    for (std::list<Car>::iterator car = cars.begin(); car != cars.end(); car++){
         
-        if (car->x < config->roadLength)
-            newRoad[car->x][car->lane] = OCCUPIED;
+        #pragma omp single nowait
+        {
+            car->move(road, config, stations);
+            
+            if (car->x < config->roadLength)
+                newRoad[car->x][car->lane] = OCCUPIED;
+        } 
         
-        car++;
     }
 
     road = newRoad;

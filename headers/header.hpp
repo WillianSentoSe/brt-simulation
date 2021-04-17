@@ -5,6 +5,7 @@
 #include <time.h>
 #include <string>
 #include <list>
+#include <omp.h>
 
 #define UNDEFINED -1
 
@@ -21,6 +22,10 @@
 // TIPOS DE FAIXA
 #define MAIN_LANE 0
 #define STATION_LANE 1
+
+// TIPOS DE FAIXA
+#define SEQUENTIAL_FLG 0
+#define PARALLEL_FLG 1
 
 class Station;
 class Automata;
