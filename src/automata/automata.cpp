@@ -18,9 +18,7 @@ void Automata::startSimulation() {
 
     while(currentIteration++ < config->totalIterations) {
         updateCarList();
-
         iterationStep();
-        
         //printRoad(currentIteration);
     }
 }
@@ -109,17 +107,17 @@ void Automata::printRoad(int iteration) {
 void Automata::updateCarList() {
     std::list<Car>::iterator car = cars.begin();
 
-    // Removendo carros inativos
+    // Percorrendo a lista de carros e removendo elementos inativos
     while (car != cars.end()) {
-        if (car->status != REMOVED) {
-            ++car;
+        if (car->status == REMOVED) {
+            car = cars.erase(car);
         }
         else {
-            car = cars.erase(car);
+            ++car;
         }
     }
 
-    // Adicionando novos carros
+    // Adicionando novos carros periodicamente
     if (nextCarIn <= 0) {
         spawnCar();
     } else {

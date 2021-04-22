@@ -12,8 +12,7 @@ Configuration::Configuration(int argc, char **argv) {
     if (argc >= 10) carStopIntervalMax = std::stoi(argv[9]);
     if (argc >= 11) numThreads = std::stoi(argv[10]);  
     
-
-    print(toString());
+    // print(toString());
 }
 
 std::string Configuration::toString() {
